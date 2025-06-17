@@ -9,7 +9,7 @@ router = APIRouter(
     tags=["Menu"]
 )
 
-# Dependency for DB session
+
 def get_db():
     db = database.SessionLocal()
     try:
@@ -17,12 +17,12 @@ def get_db():
     finally:
         db.close()
 
-# Get all menu items (open to all users)
+
 @router.get("/", response_model=List[schemas.MenuItemResponse])
 def get_menu_items(db: Session = Depends(get_db)):
     return db.query(models.MenuItem).all()
 
-# Create a menu item (manager only)
+
 @router.post("/", response_model=schemas.MenuItemResponse)
 def create_menu_item(
     menu_item: schemas.MenuItemCreate,
@@ -38,7 +38,7 @@ def create_menu_item(
     db.refresh(new_item)
     return new_item
 
-# Update a menu item (manager only)
+
 @router.put("/{item_id}", response_model=schemas.MenuItemResponse)
 def update_menu_item(
     item_id: int,
@@ -55,7 +55,7 @@ def update_menu_item(
     db.refresh(db_item)
     return db_item
 
-# Delete a menu item (manager only)
+
 @router.delete("/{item_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_menu_item(
     item_id: int,
